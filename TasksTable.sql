@@ -1,0 +1,6 @@
+CREATE TABLE Tasks(
+    ID INT,
+    TextTitle VARCHAR(50),
+    Priority VARCHAR(255),
+    CONSTRAINT PK_ID PRIMARY KEY(ID)
+);
