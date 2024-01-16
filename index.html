@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    input {
+      margin-bottom: 10px;
+      padding: 8px;
+    }
+    button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #taskDisplay {
+      max-width: 300px;
+      margin: 20px auto;
+    }
+    #delete {
+        background-color:#FF0000;
+    }
+    
+    
+    .taskItem {
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .completedTask {
+      background-color: #d3ffd3;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>To-Do List</h1>
+
+<form id="taskForm">
+  <label for="taskTitle">To-Do-List:</label>
+  <input type="text" id="taskTitle" name="taskTitle" required>
+  <button type="button" id="add">Add Task</button> <!-- Closing angle bracket added -->
+  <label for="priority">Priority:</label>
+  <select id="priority" name="priority">
+    <option value="L">Low</option>
+    <option value="M">Medium</option>
+    <option value="H">High</option>
+  </select>
+</form>
+
+  <div id="taskDisplay"></div>
+  
+  
+<script>
+    function AddTask() {
+  var taskTitle = document.getElementById("taskTitle").value;
+  var priority = document.getElementById("priority").value; // Get the selected priority
+
+  fetch("TaskGenerator", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: "taskTitle=" + encodeURIComponent(taskTitle) + "&priority=" + encodeURIComponent(priority)
+  })
+    .then(response => response.json())
+    .then(taskData => updateTaskList(taskData))
+    .catch(error => console.error("Error:", error));
+}
+
+ document.getElementById("add").addEventListener("click", AddTask);
+    
+function updateTaskList(taskData) {
+  var taskDisplay = document.getElementById("taskDisplay");
+
+  var taskItem = document.createElement("div");
+  var taskId = taskData.ID;
+  taskItem.className = "taskItem" + (taskData.done ? " completedTask" : "");
+  taskItem.innerHTML = `
+    <div id="taskLabel_${taskId}" class="taskLabel">
+      <input type="checkbox" onchange="toggleTaskCompletion(this)">
+      <strong>ID:</strong> ${taskId} | 
+      <strong>Title:</strong> ${taskData.textTitle} | 
+      <strong>Priority:</strong> ${taskData.priority}
+    </div>
+  `;
+
+  taskDisplay.appendChild(taskItem);
+}
+
+
+
+
+function toggleTaskCompletion(checkbox) {
+    var taskItem = checkbox.parentNode.parentNode;
+    var checked = checkbox.checked;
+    taskItem.classList.toggle("completedTask", checked);
+}
+
+  </script>
+  
+</body>
+</html>
+
+
