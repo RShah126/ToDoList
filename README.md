@@ -13,3 +13,6 @@ I wanted to do a simple idea, because I didn't know much, so I did something tha
 
 ## Snippet
 [screen-capture.webm](https://github.com/RShah126/ToDoList/assets/65997615/38b9da69-b8e1-40c7-8ad6-388a74272912)
+
+## If the video doesn't work
+Try a different browser if the video doesn't work.
